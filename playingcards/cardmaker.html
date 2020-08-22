@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+
+    <title>Sample Card Maker</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <style>
+        body {
+            margin: 20px;
+        }
+
+        #cardcontainer {
+            display: inline-block;
+            padding: 12px;
+            background-color: #333;
+            border-radius: 4px;
+        }
+
+        .bjcard {
+            float: left;
+            position: relative;
+            font-family: 'Times New Roman', Times, serif;
+            /* For playing cards dimensions use 2.5 inches by 3.5 inches. In pixes can use ratio of 100 x 140 or 110 x 154 or 120 x 168. */
+            width: 100%;
+            max-width: 100px;
+            min-height: 140px;
+            max-height: 140px;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 28px;
+            padding: 6px 8px;
+            background-color: #FFF;
+            display: flex;
+            margin-right: 12px;
+            margin-bottom: 12px;
+        }
+
+        .diamonds, .hearts {
+            color: #E94F37;
+        }
+
+        .spades, .clubs {
+            color: #393E41;
+        }
+
+        .rank {
+            position: absolute;
+            width: 30px;
+            height: 28px;
+        }
+
+        .top {
+            top: 2px;
+            left: 8px;
+        }
+
+        .bottom {
+            bottom: 14px;
+            right: 8px;
+            text-align: right;
+        }
+
+        .suit {
+            margin: auto;
+            font-size: 60px;
+        }
+
+        .cardfade-in {
+            opacity: 1;
+            animation-name: fadeInOpacity;
+            animation-iteration-count: 1;
+            animation-timing-function: ease-in;
+            animation-duration: 1s;
+        }
+
+        @keyframes fadeInOpacity {
+            0% {
+                opacity: 0;
+            }
+
+            100% {
+                opacity: 1;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <p><strong>Javascript to make a deck of cards </strong></p>
+
+    <div id="cardcontainer">&nbsp;</div>
+
+    <script language="javascript">
+    // Typically this code would be in a separate file. For convenience it is in this file.
+	var deckfordiv = "";
+
+	// Create a deck of cards. Standard deck is 52 cards with 4 suits and rank from 2 to A (ace)
+	var deck = {
+        deckArray: [],
+        initialize: function () {
+            var suitArray, rankArray, s, r;
+
+            suitArray = ["clubs", "diamonds", "hearts", "spades"];
+
+            rankArray = [2, 3, 4, 5, 6, 7, 8, 9, 10, "J", "Q", "K", "A"];
+
+            for (s = 0; s < suitArray.length; s += 1) {
+                for (r = 0; r < rankArray.length; r += 1) {
+                    this.deckArray[s * 13 + r] = {
+                        rank: rankArray[r],
+                        suit: suitArray[s]
+                    };
+                }
+            }
+        },
+        displaycards: function () {
+            var temp, i, rnd, cardrank, cardsuit;
+            for (i = 0; i < this.deckArray.length; i += 1) {
+				cardsuit = this.deckArray[i].suit;
+				cardrank = this.deckArray[i].rank;
+				deckfordiv += createCard(cardsuit, cardrank);
+            }
+        }
+    };
+
+    // Here we create the actual card
+	function createCard(suit, rank) {
+		var htmlEntities = {
+			'clubs': '&#9827;',
+			'diamonds': '&#9830;',
+			'hearts': '&#9829;',
+			'spades': '&#9824;'
+		}
+
+		// Render the card with divs and html entities, no need for images
+		return `
+				<div class="cardfade-in h-100 bjcard ` + suit + `">
+					<div class="top rank">` + rank + `</div>
+					<div class="suit">` + htmlEntities[suit] + `</div>
+					<div class="bottom rank">` + rank + `</div>
+				</div>
+			`;
+	}
+
+	deck.initialize();
+	deck.displaycards();
+	// Can use plain Javascript to display cards in card container div
+	document.getElementById("cardcontainer").innerHTML = deckfordiv;
+    </script>
+
+
+</body>
+</html>
